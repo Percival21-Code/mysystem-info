@@ -41,8 +41,10 @@ body {
 	width: min(90vw, 600px);
 	padding: 20px;
 
-	background: var(--second-dark);
-	border-radius: 12px;
+	background: var(--main-dark);
+	border-radius: 36px;
+	border-left: 1px solid var(--accent);
+	border-right: 1px solid var(--accent);
 }
 
 .login-header {
@@ -104,6 +106,10 @@ body {
 
 p.kirby-reference {
 	color: var(--main-light);
+	position: fixed;
+	right: 48px;
+	bottom: 8px;
+	text-align: right;
 }
 
 @media screen and (max-width: 750px) {
@@ -118,5 +124,11 @@ p.kirby-reference {
 		right: 5%;
 		width: 90%;
 		justify-content: center;
+	}
+
+	p.kirby-reference {
+		text-align: center;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 }
