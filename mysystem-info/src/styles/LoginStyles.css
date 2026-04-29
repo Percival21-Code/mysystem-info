@@ -1,0 +1,118 @@
+:root {
+	--main-dark: #000;
+	--second-dark: #444;
+	--main-light: #fff;
+	--accent: #db2d2d;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	margin: 0;
+	min-height: 100vh;
+	width: 100%;
+	overflow-x: hidden;
+}
+
+body {
+	font-family: "Roboto", sans-serif;
+	color: var(--second-light);
+
+	background-image: url("/src/assets/dark-logo-bg.png");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.login-box {
+	position: fixed;
+	top: 50%;
+	right: clamp(24px, 10vw, 256px);
+	transform: translateY(-64%);
+
+	display: flex;
+	flex-direction: column;
+
+	width: min(90vw, 600px);
+	padding: 20px;
+
+	background: var(--second-dark);
+	border-radius: 12px;
+}
+
+.login-header {
+	margin: 0 0 16px;
+	font-size: 1.8rem;
+	text-align: center;
+	color: var(--main-light);
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.login-input-boxes {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.login-input-boxes input {
+	padding: 10px 12px;
+	font-size: 0.95rem;
+
+	border-radius: 6px;
+	border: 1px solid #ccc;
+	outline: none;
+}
+
+.login-input-boxes input:focus {
+	border-color: var(--accent);
+}
+
+.login-button {
+	margin-top: 6px;
+	padding: 10px;
+
+	font-size: 0.95rem;
+	font-weight: 600;
+
+	border-radius: 6px;
+	border: none;
+
+	background: var(--accent);
+	color: white;
+	cursor: pointer;
+}
+
+.login-button:hover {
+	filter: brightness(1.05);
+}
+
+.login-error,
+.login-status {
+	font-size: 0.85rem;
+	margin: 0;
+}
+
+@media screen and (max-width: 750px) {
+	body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.login-box {
+		position: fixed;
+		right: 5%;
+		width: 90%;
+		justify-content: center;
+	}
+}
