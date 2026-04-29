@@ -27,47 +27,53 @@ const Login = () => {
 	};
 
 	return (
-		<div className="login-box">
-			<h1 className="login-header">MySystem Login</h1>
+		<>
+			<div className="login-box">
+				<h1 className="login-header">MySystem Login</h1>
 
-			<form
-				className="login-form"
-				onSubmit={handleLogin}
-			>
-				<div className="login-input-boxes">
-					<input
-						type="text"
-						placeholder="Customer No."
-						value={customerNo}
-						onChange={(e) => setCustomerNo(e.target.value)}
-					/>
-
-					<input
-						type="email"
-						placeholder="Email Address"
-						value={emailAddress}
-						onChange={(e) => setEmailAddress(e.target.value)}
-					/>
-
-					<input
-						type="password"
-						placeholder="Password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-				</div>
-
-				{error && <p className="login-error">{error}</p>}
-				{status && <p className="login-status">{status}</p>}
-
-				<button
-					className="login-button"
-					type="submit"
+				<form
+					className="login-form"
+					onSubmit={handleLogin}
 				>
-					Login
-				</button>
-			</form>
-		</div>
+					<div className="login-input-boxes">
+						<input
+							type="text"
+							placeholder="Customer No."
+							value={customerNo}
+							onChange={(e) => setCustomerNo(e.target.value)}
+						/>
+
+						<input
+							type="email"
+							placeholder="Email Address"
+							value={emailAddress}
+							onChange={(e) => setEmailAddress(e.target.value)}
+						/>
+
+						<input
+							type="password"
+							placeholder="Password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</div>
+
+					{error && <p className="login-error">{error}</p>}
+					{status && <p className="login-status">{status}</p>}
+
+					<button
+						className="login-button"
+						type="submit"
+					>
+						Login
+					</button>
+				</form>
+			</div>
+
+			<p className="kirby-reference">
+				mysystem.info - A Kirby Security UK Ltd web service.
+			</p>
+		</>
 	);
 };
 
