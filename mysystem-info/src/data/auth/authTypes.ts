@@ -1,0 +1,32 @@
+export type UserRole =
+	| "Administrator"
+	| "Staff"
+	| "Engineer"
+	| "CustomerUser"
+	| "SiteUser";
+
+export type AuthUser = {
+	userId: string;
+	username: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	roles: UserRole[];
+};
+
+export type LoginRequest = {
+	username: string;
+	password: string;
+};
+
+export type LoginResponse = {
+	token: string;
+	user: AuthUser;
+};
+
+export type AuthState = {
+	user: AuthUser | null;
+	token: string | null;
+	isAuthenticated: boolean;
+	isLoading: boolean;
+};

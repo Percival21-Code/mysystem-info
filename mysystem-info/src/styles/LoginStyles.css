@@ -1,26 +1,16 @@
 :root {
 	--main-dark: #000;
 	--second-dark: #444;
-	--main-light: #fff;
+	--main-light: #fee;
 	--accent: #db2d2d;
 }
 
-* {
-	box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-	margin: 0;
-	min-height: 100vh;
+.login-page {
+	min-height: 100%;
 	width: 100%;
-	overflow-x: hidden;
-}
 
-body {
 	font-family: "Roboto", sans-serif;
-	color: var(--second-light);
+	color: var(--main-light);
 
 	background-image: url("/src/assets/dark-logo-bg.png");
 	background-size: cover;
@@ -32,25 +22,31 @@ body {
 .login-box {
 	position: fixed;
 	top: 50%;
-	right: clamp(24px, 10vw, 256px);
+	right: clamp(24px, 14vw, 256px);
 	transform: translateY(-64%);
 
 	display: flex;
 	flex-direction: column;
 
 	width: min(90vw, 600px);
-	padding: 20px;
-
+	padding: 20px 20px;
 	background: var(--main-dark);
-	border-radius: 36px;
-	border-left: 1px solid var(--accent);
-	border-right: 1px solid var(--accent);
+}
+
+.login-box::after {
+	content: "";
+	width: 120%;
+	height: 120%;
+	z-index: 1000;
+	background-color: var(--main-dark);
 }
 
 .login-header {
 	margin: 0 0 16px;
 	font-size: 1.8rem;
-	text-align: center;
+	text-align: right;
+	padding-right: 1%;
+	padding-bottom: 2%;
 	color: var(--main-light);
 }
 
@@ -80,7 +76,8 @@ body {
 }
 
 .login-button {
-	margin-top: 6px;
+	margin-top: 8px;
+	margin-bottom: 16px;
 	padding: 10px;
 
 	font-size: 0.95rem;
@@ -102,6 +99,8 @@ body {
 .login-status {
 	font-size: 0.85rem;
 	margin: 0;
+	font-weight: 500;
+	color: var(--accent);
 }
 
 p.kirby-reference {
@@ -121,7 +120,7 @@ p.kirby-reference {
 
 	.login-box {
 		position: fixed;
-		right: 5%;
+		margin: 0 auto;
 		width: 90%;
 		justify-content: center;
 	}
