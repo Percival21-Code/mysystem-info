@@ -25,18 +25,6 @@ const SitesFilterPanel = ({
 
 			<input
 				type="text"
-				placeholder="Site Name"
-				value={filters.siteName}
-				onChange={(e) =>
-					onFiltersChange({
-						...filters,
-						siteName: e.target.value,
-					})
-				}
-			/>
-
-			<input
-				type="text"
 				placeholder="Post Code"
 				value={filters.postCode}
 				onChange={(e) =>

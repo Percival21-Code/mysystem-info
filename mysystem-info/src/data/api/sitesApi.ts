@@ -95,10 +95,14 @@ export const sitesApi = {
 		customerNo: string,
 		page: number = 1,
 		pageSize: number = 50,
-		status?: string
+		status?: string,
+		siteId?: string,
+		postCode?: string
 	): Promise<SitesResponse> => {
 		const cleanCustomerNo = customerNo.trim().toUpperCase();
 		const cleanStatus = status?.trim().toUpperCase() ?? "";
+		const cleanSiteId = siteId?.trim().toUpperCase() ?? "";
+		const cleanPostCode = postCode?.trim().toUpperCase() ?? "";
 
 		if (!cleanCustomerNo) {
 			throw new Error("Customer Number was not passed into the Sites API Request.");
@@ -123,6 +127,14 @@ export const sitesApi = {
 			params.set("status", cleanStatus);
 		}
 
+		if (cleanSiteId) {
+			params.set("siteId", cleanSiteId);
+		}
+
+		if (cleanPostCode) {
+			params.set("postCode", cleanPostCode);
+		}
+
 		const response = await sitesApi.middlewareGet<MiddlewareSitesResponse>(
 			`/api/sites?${params.toString()}`
 		);
@@ -134,5 +146,30 @@ export const sitesApi = {
 			total: response.total,
 			hasMore: response.hasMore,
 		};
+	},
+
+	getSiteById: async (siteId: string): Promise<Site> => {
+		const cleanSiteId = siteId.trim().toUpperCase();
+
+		if (!cleanSiteId) {
+			throw new Error("Site ID is required.");
+		}
+
+		const params = new URLSearchParams({
+			siteId: cleanSiteId,
+		});
+
+		const response =
+			await sitesApi.middlewareGet<MiddlewareSitesResponse>(
+				`/api/sites?${params.toString()}`
+			);
+
+		const site = response.items[0];
+
+		if (!site) {
+			throw new Error(`Site ${cleanSiteId} was not found.`);
+		}
+
+		return mapMiddlewareSiteToSite(site);
 	},
 };

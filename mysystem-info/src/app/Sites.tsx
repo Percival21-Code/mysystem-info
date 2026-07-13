@@ -2,7 +2,7 @@ import "../styles/app-styles/Sites.css";
 import SitesFilterPanel from "../components/sites/SitesFilterPanel";
 import SitesTable from "../components/sites/SitesTable";
 import SiteDetailsModal from "../components/sites/SiteDetailsModal";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { sitesApi } from "../data/api/sitesApi";
 import type { Site, SiteFilters } from "../data/types/siteTypes";
 
@@ -11,18 +11,18 @@ const Sites = () => {
 	const [searchedCustomerNo, setSearchedCustomerNo] = useState("");
 
 	const [filters, setFilters] = useState<SiteFilters>({
-        siteId: "",
-        siteName: "",
-        postCode: "",
-        status: "",
-    });
+		siteId: "",
+		propertyReferenceNo: "",
+		postCode: "",
+		status: "",
+	});
 
 	const [sites, setSites] = useState<Site[]>([]);
 	const [selectedSite, setSelectedSite] = useState<Site | null>(null);
 
 	const [page, setPage] = useState(1);
+	const [pageInput, setPageInput] = useState("1");
 	const [siteRows, setSiteRows] = useState(10);
-	const [total, setTotal] = useState(0);
 	const [hasMore, setHasMore] = useState(false);
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -31,8 +31,15 @@ const Sites = () => {
 	const loadSites = async (pageToLoad = 1) => {
 		setError("");
 
-		if (!customerNo.trim()) {
+		const cleanCustomerNo = customerNo.trim();
+
+		if (!cleanCustomerNo) {
 			setError("Customer No is required.");
+			return;
+		}
+
+		if (pageToLoad < 1) {
+			setError("Page number must be 1 or higher.");
 			return;
 		}
 
@@ -40,17 +47,19 @@ const Sites = () => {
 			setIsLoading(true);
 
 			const result = await sitesApi.getSitesByCustomerNo(
-                customerNo.trim(),
-                pageToLoad,
-                siteRows,
-                filters.status || ''
-            );
+				cleanCustomerNo,
+				pageToLoad,
+				siteRows,
+				filters.status || "",
+				filters.siteId || "",
+				filters.postCode || ""
+			);
 
 			setSites(result.items);
 			setPage(result.page);
-			setTotal(result.total);
+			setPageInput(result.page.toString());
 			setHasMore(result.hasMore);
-			setSearchedCustomerNo(customerNo.trim());
+			setSearchedCustomerNo(cleanCustomerNo);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to load sites.");
 		} finally {
@@ -58,38 +67,34 @@ const Sites = () => {
 		}
 	};
 
-	const filteredSites = useMemo(() => {
-        return sites.filter((site) => {
-            const siteId = filters.siteId.toLowerCase().trim();
-            const siteName = filters.siteName.toLowerCase().trim();
-            const postCode = filters.postCode.toLowerCase().trim();
-            const status = filters.status.toLowerCase().trim();
+	const handlePageSubmit = () => {
+		const requestedPage = Number(pageInput);
 
-            const matchesSiteId =
-                !siteId || site.siteId.toLowerCase().includes(siteId);
+		if (!Number.isInteger(requestedPage) || requestedPage < 1) {
+			setError("Please enter a valid page number.");
+			return;
+		}
 
-            const matchesSiteName =
-                !siteName || site.siteName.toLowerCase().includes(siteName);
+		loadSites(requestedPage);
+	};
 
-            const matchesPostCode =
-                !postCode || site.postCode.toLowerCase().includes(postCode);
-
-            const matchesStatus = 
-                !status || site.status.toLowerCase().includes(status);
-
-            return matchesSiteId && matchesSiteName && matchesPostCode && matchesStatus;
-        });
-    }, [sites, filters]);
+	const handleRowsChange = (value: number) => {
+		const cleanValue = Math.min(Math.max(value, 1), 100);
+		setSiteRows(cleanValue);
+	};
 
 	return (
 		<div className="sites-screen">
 			<div className="sites-header">
 				<div>
-					<h1>Sites</h1>
+					<h1 className="sites-heading">Sites</h1>
 
 					{searchedCustomerNo && (
-						<p>
-							Showing customer <strong>{searchedCustomerNo}</strong>
+						<p className="sites-subtitle">
+							Showing customer{" "}
+							<strong className="shown-customerno-heading">
+								{searchedCustomerNo.toUpperCase()}
+							</strong>
 						</p>
 					)}
 				</div>
@@ -100,6 +105,11 @@ const Sites = () => {
 						placeholder="Customer No"
 						value={customerNo}
 						onChange={(e) => setCustomerNo(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								loadSites(1);
+							}
+						}}
 					/>
 
 					<button type="button" onClick={() => loadSites(1)}>
@@ -113,50 +123,68 @@ const Sites = () => {
 			</div>
 
 			<div className="sites-toolbar">
-				<p>
-					{filteredSites.length} shown / {total} total
-				</p>
-
-				<label>
+				<label className="sites-toolbar-control">
 					Rows
 					<input
 						type="number"
 						min={1}
-						max={200}
+						max={100}
 						value={siteRows}
-						onChange={(e) => setSiteRows(Number(e.target.value))}
+						onChange={(e) => handleRowsChange(Number(e.target.value))}
 					/>
 				</label>
 			</div>
 
 			{error && <p className="sites-error">{error}</p>}
-			{isLoading && <p>Loading sites...</p>}
 
 			<div className="sites-view">
 				<SitesTable
-					sites={filteredSites}
+					sites={sites}
 					rowsToShow={siteRows}
 					onSiteClick={setSelectedSite}
+					isLoading={isLoading}
 				/>
 			</div>
 
 			<div className="sites-pagination">
 				<button
 					type="button"
+					className="pagination-button"
 					disabled={page <= 1 || isLoading}
 					onClick={() => loadSites(page - 1)}
 				>
-					Previous
+					‹
 				</button>
 
-				<span>Page {page}</span>
+				<div className="page-jump">
+					<span>Page</span>
+					<input
+						type="number"
+						min={1}
+						value={pageInput}
+						onChange={(e) => setPageInput(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								handlePageSubmit();
+							}
+						}}
+					/>
+					<button
+						type="button"
+						onClick={handlePageSubmit}
+						disabled={isLoading}
+					>
+						Go
+					</button>
+				</div>
 
 				<button
 					type="button"
+					className="pagination-button"
 					disabled={!hasMore || isLoading}
 					onClick={() => loadSites(page + 1)}
 				>
-					Next
+					›
 				</button>
 			</div>
 

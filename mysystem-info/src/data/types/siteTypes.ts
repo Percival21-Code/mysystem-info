@@ -31,7 +31,7 @@ export type SiteCall = {
 
 export type SiteFilters = {
 	siteId: string;
-	siteName: string;
+	propertyReferenceNo: string;
 	postCode: string;
 	status: string;
 };

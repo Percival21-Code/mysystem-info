@@ -1,13 +1,21 @@
 import type { Site } from "../../data/types/siteTypes";
+import "../../styles/app-styles/SitesTable.css";
 
 type SitesTableProps = {
 	sites: Site[];
 	rowsToShow: number;
 	onSiteClick: (site: Site) => void;
+	isLoading?: boolean;
 };
 
-const SitesTable = ({ sites, rowsToShow, onSiteClick }: SitesTableProps) => {
+const SitesTable = ({
+	sites,
+	rowsToShow,
+	onSiteClick,
+	isLoading = false,
+}: SitesTableProps) => {
 	const visibleSites = sites.slice(0, rowsToShow);
+	const skeletonRows = Array.from({ length: Math.min(rowsToShow, rowsToShow) });
 
 	return (
 		<table className="sites-table">
@@ -21,18 +29,61 @@ const SitesTable = ({ sites, rowsToShow, onSiteClick }: SitesTableProps) => {
 			</thead>
 
 			<tbody>
-				{visibleSites.map((site) => (
-					<tr key={site.siteId} onClick={() => onSiteClick(site)}>
-						<td>{site.siteId}</td>
-						<td>{site.siteName}</td>
-						<td>{site.postCode}</td>
-						<td>{(site.status === 'L') ? <p>Live</p> : <p>dead</p>}</td>
-					</tr>
-				))}
+				{isLoading &&
+					skeletonRows.map((_, index) => (
+						<tr key={`skeleton-${index}`} className="sites-skeleton-row">
+							<td>
+								<span className="skeleton-block skeleton-short" />
+							</td>
+							<td>
+								<span className="skeleton-block skeleton-long" />
+							</td>
+							<td>
+								<span className="skeleton-block skeleton-medium" />
+							</td>
+							<td>
+								<span className="skeleton-block skeleton-short" />
+							</td>
+						</tr>
+					))}
 
-				{visibleSites.length === 0 && (
+				{!isLoading &&
+					visibleSites.map((site) => (
+						<tr key={site.siteId} className="sites-table-row">
+							<td>
+								<button
+									type="button"
+									className="site-id-button"
+									onClick={(e) => {
+										e.stopPropagation();
+										onSiteClick(site);
+									}}
+								>
+									{site.siteId}
+								</button>
+							</td>
+
+							<td>{site.siteName}</td>
+							<td>{site.postCode}</td>
+							<td>
+								<span
+									className={
+										site.status === "L"
+											? "site-status site-status-live"
+											: "site-status site-status-dead"
+									}
+								>
+									{site.status === "L" ? "Live" : "Dead"}
+								</span>
+							</td>
+						</tr>
+					))}
+
+				{!isLoading && visibleSites.length === 0 && (
 					<tr>
-						<td colSpan={5}>No sites found.</td>
+						<td colSpan={4} className="sites-empty-row">
+							No sites found.
+						</td>
 					</tr>
 				)}
 			</tbody>
