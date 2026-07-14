@@ -35,7 +35,7 @@ type SitesResponse = {
 
 type MiddlewareTokenResponse = {
 	accessToken: string;
-};
+}
 
 const mapMiddlewareSiteToSite = (site: MiddlewareSite): Site => {
 	return {

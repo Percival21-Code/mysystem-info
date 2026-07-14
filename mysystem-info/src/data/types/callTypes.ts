@@ -1,5 +1,5 @@
 export type Call = {
-	callNumber: string;
+	callNumber: number;
 	callType: string;
 	callStatus: string;
 	siteId: string;
@@ -7,6 +7,14 @@ export type Call = {
 	loggingOperator: string;
 	engineer: string;
 	systemType: string;
+
+	completedDate: string;
+	customerReference: string;
+	invoiceNo: string;
+	loggedRemarks: string;
+	completedRemarks: string;
+	previousMaintenanceDate: string | null;
+	nextMaintenanceDate: string | null;
 };
 
 export type CallFilters = {

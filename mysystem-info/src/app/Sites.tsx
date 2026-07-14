@@ -5,9 +5,12 @@ import SiteDetailsModal from "../components/sites/SiteDetailsModal";
 import { useState } from "react";
 import { sitesApi } from "../data/api/sitesApi";
 import type { Site, SiteFilters } from "../data/types/siteTypes";
+import { getStoredCustomerNo, setStoredCustomerNo } from "../data/storage/customerStorage";
 
 const Sites = () => {
-	const [customerNo, setCustomerNo] = useState("");
+	const [customerNo, setCustomerNo] = useState(
+		() => getStoredCustomerNo()
+	);
 	const [searchedCustomerNo, setSearchedCustomerNo] = useState("");
 
 	const [filters, setFilters] = useState<SiteFilters>({
@@ -31,7 +34,7 @@ const Sites = () => {
 	const loadSites = async (pageToLoad = 1) => {
 		setError("");
 
-		const cleanCustomerNo = customerNo.trim();
+		const cleanCustomerNo = customerNo.trim().toUpperCase();
 
 		if (!cleanCustomerNo) {
 			setError("Customer No is required.");
@@ -59,6 +62,8 @@ const Sites = () => {
 			setPage(result.page);
 			setPageInput(result.page.toString());
 			setHasMore(result.hasMore);
+			setStoredCustomerNo(cleanCustomerNo);
+			setCustomerNo(cleanCustomerNo);
 			setSearchedCustomerNo(cleanCustomerNo);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to load sites.");

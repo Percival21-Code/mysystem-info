@@ -1,0 +1,155 @@
+.calls-table {
+	width: 100%;
+	table-layout: auto;
+	margin-top: 12px;
+	border-collapse: collapse;
+	border-radius: 24px;
+}
+
+.calls-table thead th {
+	padding: 12px 16px;
+
+	color: #222;
+	font-weight: 600;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.calls-table tbody tr {
+	position: relative;
+}
+
+.calls-table tbody tr:nth-child(odd) {
+	background: rgba(219, 45, 45, 0.18);
+}
+
+.calls-table tbody tr::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	height: 1px;
+
+	background: rgba(0, 0, 0, 0.12);
+	pointer-events: none;
+}
+
+.calls-table td {
+	padding: 14px 16px;
+	color: #222;
+	vertical-align: middle;
+}
+
+.call-number-button {
+	padding: 0;
+
+	border: none;
+	background: transparent;
+
+	color: #222;
+	font: inherit;
+	font-weight: 600;
+	text-align: left;
+
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.call-number-button:hover {
+	color: #db2d2d;
+	text-decoration: underline;
+}
+
+.call-status {
+	display: inline-block;
+	padding: 4px 10px;
+
+	border-radius: 999px;
+
+	font-size: 0.85rem;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.call-status-open {
+	background: rgba(219, 45, 45, 0.12);
+	color: #a51f1f;
+}
+
+.call-status-progress {
+	background: rgba(223, 145, 20, 0.14);
+	color: #875400;
+}
+
+.call-status-complete {
+	background: rgba(36, 145, 74, 0.12);
+	color: #19713a;
+}
+
+.call-status-cancelled {
+	background: rgba(0, 0, 0, 0.08);
+	color: #555;
+}
+
+.calls-empty-row {
+	padding: 32px 16px;
+	color: #666;
+	text-align: center;
+}
+
+/* ===================== skeleton rows ===================== */
+
+.calls-skeleton-row td {
+	padding: 14px 16px;
+}
+
+.calls-table .skeleton-block {
+	display: block;
+	height: 14px;
+
+	border-radius: 999px;
+
+	background: linear-gradient(
+		90deg,
+		rgba(219, 45, 45, 0.08),
+		rgba(219, 45, 45, 0.18),
+		rgba(219, 45, 45, 0.08)
+	);
+
+	background-size: 200% 100%;
+	animation: calls-skeleton-loading 1.2s ease-in-out infinite;
+}
+
+.calls-table .skeleton-short {
+	width: 70px;
+}
+
+.calls-table .skeleton-medium {
+	width: 110px;
+}
+
+.calls-table .skeleton-long {
+	width: min(240px, 85%);
+}
+
+@keyframes calls-skeleton-loading {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.calls-view {
+		overflow-x: auto;
+	}
+
+	.calls-table {
+		min-width: 820px;
+	}
+}
