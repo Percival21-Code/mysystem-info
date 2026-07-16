@@ -25,3 +25,6 @@ dist-ssr
 
 # extras
 .env
+
+# other directories
+./mysystem-bff/*
