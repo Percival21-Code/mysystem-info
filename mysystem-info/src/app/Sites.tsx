@@ -49,13 +49,13 @@ const Sites = () => {
 		try {
 			setIsLoading(true);
 
-			const result = await sitesApi.getSitesByCustomerNo(
+			const result = await sitesApi.getSites(
 				cleanCustomerNo,
 				pageToLoad,
 				siteRows,
-				filters.status || "",
-				filters.siteId || "",
-				filters.postCode || ""
+				filters.status,
+				filters.siteId,
+				filters.postCode
 			);
 
 			setSites(result.items);
